@@ -1,0 +1,2 @@
+code = liz.code("pointel/rust-cy.yml")
+code:print_all()
