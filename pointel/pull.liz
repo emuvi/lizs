@@ -1,0 +1,54 @@
+-- If is in a repository root then fetch it
+
+is_in_repo_root = liz.is_dir("./.git")
+
+-- Else try to find the Code root to fetch then all
+
+if not is_in_repo_root then
+   code_root_path = liz.path_parent_find(".", "Code")
+end
+
+if not is_in_repo_root and code_root_path == "" then
+   print("Could not determine a course of action to take.")
+   return
+end
+
+all_spawned = {}
+
+if is_in_repo_root then
+   project = liz.path_absolute(".")
+   print("Pulling on project path: " .. project)
+   table.insert(all_spawned, {project, liz.spawn("pull.path", {project})})
+else
+   print("Pulling on Code path: " .. code_root_path)
+   code_root = liz.path_list_dirs(code_root_path)
+   for _, category in ipairs(code_root) do
+      projects = liz.path_list_dirs(category)
+      for _, project in ipairs(projects) do
+         table.insert(all_spawned, {project, liz.spawn("pull.path", {project})})
+      end
+   end
+end
+
+any_is_error = false
+for _, spawned in ipairs(all_spawned) do
+   local project = spawned[1]
+   print("x----------------------------------------------------x")
+   print("Pulling on project path: " .. project)
+   local spawned_results = liz.join(spawned[2])
+   local returned_code = liz.from_json(spawned_results[1])
+   if returned_code ~= 0 then
+      any_is_error = true
+   end
+   local returned_output = liz.from_json(spawned_results[2])
+   print("[" .. returned_code .. "] - " .. returned_output)
+end
+print("+----------------------------------------------------+")
+print("|                                                    |")
+if not any_is_error then
+   print("|                Everything pulled.                  |")
+else
+   print("|     There was [ ERROR(s) ] in some project(s)!     |")
+end
+print("|                                                    |")
+print("+----------------------------------------------------+")
