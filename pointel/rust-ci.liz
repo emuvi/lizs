@@ -1,2 +1,3 @@
-code = liz.code("pointel/rust-cy.yml")
+file = liz.read("pointel/rust-ci.yml")
+code = liz.code(file)
 code:print_all()
