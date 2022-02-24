@@ -1,3 +1,4 @@
-file = liz.read("pointel/rust-ci.yml")
+liz.download("https://raw.githubusercontent.com/emuvi/lizs/main/pointel/rust-ci.yml", "rust-ci.yml")
+file = liz.read("rust-ci.yml")
 code = liz.code(file)
 code:print_all()
