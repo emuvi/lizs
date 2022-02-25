@@ -1,0 +1,15 @@
+projects = liz.path_list_dirs(".")
+for _, project in pairs(projects) do
+    cargo = liz.path_join(project, "Cargo.toml")
+    if liz.has(cargo) then
+        print("Project " .. project .. " is a RUST")
+        liz.cd(project)
+        liz.race_wd("(lizs)/pointel/rust-ci")
+        print("Established RUST CI on " .. project)
+        liz.rm("(lizs)")
+        liz.cd("..")
+    else
+        print("Project " .. project .. " is NOT a RUST")
+    end
+end
+liz.rm("(lizs)")
