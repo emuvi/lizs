@@ -1,7 +1,7 @@
 liz.download("https://raw.githubusercontent.com/emuvi/lizs/main/pointel/rust-ci.yml", "rust-ci.yml")
 file = liz.read("rust-ci.yml")
 code = liz.code(file)
-project = liz.path_name(liz.pwd())
+project = liz.path_name(liz.wd())
 code:change_all("$name", project)
 liz.mkdir(".github/workflows")
 code:write(".github/workflows/release.yml")
