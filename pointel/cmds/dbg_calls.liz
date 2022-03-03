@@ -1,0 +1,2 @@
+local path = liz.args[1]
+print(path)
