@@ -1,5 +1,6 @@
-#!/bin/Liz
+#!/bin/liz
+
 print("Resetting...")
 Liz.run("clean")
 Liz.run("test")
-print("Done Reset!")
+print("Done reset application")

@@ -1,12 +1,13 @@
-#!/bin/Liz
+#!/bin/liz
 
 print("Building...")
 if Liz.has("src/all.ts") then Liz.run("mkall") end
 if Liz.is_win() then
-    Call_npm = "npm.cmd"
+    Ext = ".cmd"
 else
-    Call_npm = "npm"
+    Ext = ""
 end
-Liz.cmd(Call_npm, {"install"})
-Liz.cmd("tsc", {"-p", "tsconfig.json"})
-print("Done Build!")
+Liz.cmd("npm" .. Ext, {"install"})
+print("Done install dependencies.")
+Liz.cmd("tsc" .. Ext, {"-p", "tsconfig.json"})
+print("Done build application")

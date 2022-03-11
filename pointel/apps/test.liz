@@ -1,4 +1,5 @@
-#!/bin/Liz
+#!/bin/liz
+
 print("Testing...")
 Liz.run("build")
-print("Done Test!")
+print("Done test application")
