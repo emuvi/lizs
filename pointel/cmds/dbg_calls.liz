@@ -1,2 +1,2 @@
-local path = liz.args[1]
+local path = Liz.args[1]
 print(path)

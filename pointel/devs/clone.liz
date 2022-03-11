@@ -1,20 +1,20 @@
 function is_ark(name)
-   return liz.starts_with(name, "ark-")
+   return Liz.starts_with(name, "ark-")
 end
 
 function is_app(checker)
-   return liz.contains(checker, "application")
+   return Liz.contains(checker, "application")
 end
 
 function is_cmd(checker)
-   return liz.contains(checker, "command")
+   return Liz.contains(checker, "command")
 end
 
 function is_web(checker)
-   return liz.contains(checker, "webmedia")
+   return Liz.contains(checker, "webmedia")
 end
 
-devs_root_path = liz.path_parent_find(".", "Devs")
+devs_root_path = Liz.path_parent_find(".", "Devs")
 
 if devs_root_path == "" then
    print("Could not found the Devs root path.")
@@ -23,12 +23,12 @@ end
 
 print("Cloning on Devs path: " .. devs_root_path)
 
-liz.cd(devs_root_path)
-liz.mkdir("Arks")
-liz.mkdir("Code")
-liz.mkdir("Code/apps")
-liz.mkdir("Code/cmds")
-liz.mkdir("Code/webs")
+Liz.cd(devs_root_path)
+Liz.mkdir("Arks")
+Liz.mkdir("Code")
+Liz.mkdir("Code/apps")
+Liz.mkdir("Code/cmds")
+Liz.mkdir("Code/webs")
 
 failed = {}
 
@@ -36,8 +36,8 @@ clone_page = 0
 repo_index = 0
 while true do
    clone_page = clone_page + 1
-   local resp = liz.get("https://api.github.com/users/emuvi/repos?page=" .. tostring(clone_page))
-   local repos = liz.from_json(resp)
+   local resp = Liz.get("https://api.github.com/users/emuvi/repos?page=" .. tostring(clone_page))
+   local repos = Liz.from_json(resp)
    local page_empty = true
    for _, repo in pairs(repos) do
       page_empty = false
@@ -47,7 +47,7 @@ while true do
       local description = repo["description"]
       print(description)
       local to_clone = repo["clone_url"]
-      local checker = liz.tolower(description)
+      local checker = Liz.tolower(description)
       local destiny = ""
       if (is_ark(name)) then
          destiny = "./Arks/"
@@ -63,16 +63,16 @@ while true do
          table.insert(failed, name)
       else
          local destiny_name = destiny .. "/" .. name
-         if liz.has(destiny_name) then
+         if Liz.has(destiny_name) then
             print("The repository already exists, it will be pulled.")
-            local code, output = liz.cmd("git", {"pull"}, destiny_name, false, false)
+            local code, output = Liz.cmd("git", {"pull"}, destiny_name, false, false)
             if code ~= 0 then
                table.insert(failed, name)
             end
             print(output)
          else
             print("The repository does not exists, it will be cloned.")
-            local code, output = liz.cmd("git", {"clone", to_clone}, destiny, false, false)
+            local code, output = Liz.cmd("git", {"clone", to_clone}, destiny, false, false)
             if code ~= 0 then
                table.insert(failed, name)
             end
