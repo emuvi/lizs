@@ -1,10 +1,11 @@
 #!/bin/Liz
+
 print("Building...")
-Liz.run("mkall")
+if Liz.has("src/all.ts") then Liz.run("mkall") end
 if Liz.is_win() then
-  npm = "npm.cmd"
+    npm = "npm.cmd"
 else
-  npm = "npm"
+    npm = "npm"
 end
 Liz.cmd(npm, {"install"})
 Liz.cmd("tsc", {"-p", "tsconfig.json"})
