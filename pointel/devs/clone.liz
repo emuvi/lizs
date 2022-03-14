@@ -1,29 +1,29 @@
-function is_ark(name)
+function IsArk(name)
    return Liz.starts_with(name, "ark-")
 end
 
-function is_app(checker)
+function IsApp(checker)
    return Liz.contains(checker, "application")
 end
 
-function is_cmd(checker)
+function IsCmd(checker)
    return Liz.contains(checker, "command")
 end
 
-function is_web(checker)
+function IsWeb(checker)
    return Liz.contains(checker, "webmedia")
 end
 
-devs_root_path = Liz.path_parent_find(".", "Devs")
+DevsRootPath = Liz.path_parent_find(".", "Devs")
 
-if devs_root_path == "" then
+if DevsRootPath == "" then
    print("Could not found the Devs root path.")
    return
 end
 
-print("Cloning on Devs path: " .. devs_root_path)
+print("Cloning on Devs path: " .. DevsRootPath)
 
-Liz.cd(devs_root_path)
+Liz.cd(DevsRootPath)
 Liz.mkdir("Arks")
 Liz.mkdir("Code")
 Liz.mkdir("Code/apps")
@@ -49,13 +49,13 @@ while true do
       local to_clone = repo["clone_url"]
       local checker = Liz.tolower(description)
       local destiny = ""
-      if (is_ark(name)) then
+      if (IsArk(name)) then
          destiny = "./Arks/"
-      elseif (is_app(checker)) then
+      elseif (IsApp(checker)) then
          destiny = "./Code/apps/"      
-      elseif (is_cmd(checker)) then
+      elseif (IsCmd(checker)) then
          destiny = "./Code/cmds/"      
-      elseif (is_web(checker)) then
+      elseif (IsWeb(checker)) then
          destiny = "./Code/webs/"      
       end
       if destiny == "" then
