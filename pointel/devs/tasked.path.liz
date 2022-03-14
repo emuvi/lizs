@@ -1,4 +1,4 @@
-project = Liz.args[1]
+Project = Liz.args[1]
 result_found = false
 result_output = ""
 
@@ -6,21 +6,21 @@ extensions = { ".txt", ".md", ".html", ".htm", ".css",
                ".js", ".json", ".ts", ".rs", ".toml", 
                ".Liz", ".lua", ".sh", ".bat", ".el" }
 
-all_spawned = {}
-table.insert(all_spawned, {project, Liz.spawn("tasked.path.dir", {project, project})})
-root_dirs = Liz.path_list_dirs(project)
+AllSpawned = {}
+table.insert(AllSpawned, {Project, Liz.spawn("tasked.path.dir", {Project, Project})})
+root_dirs = Liz.path_list_dirs(Project)
 for _, root_dir in ipairs(root_dirs) do
    local root_dir_name = Liz.path_name(root_dir)
    if not (root_dir_name == ".git" or Liz.git_is_ignored(root_dir)) then
-      table.insert(all_spawned, {root_dir, Liz.spawn("tasked.path.dir", {root_dir, project})})
+      table.insert(AllSpawned, {root_dir, Liz.spawn("tasked.path.dir", {root_dir, Project})})
       local leaf_dirs = Liz.path_list_dirs_in(root_dir)
 	   for _, leaf_dir in ipairs(leaf_dirs) do
-		   table.insert(all_spawned, {leaf_dir, Liz.spawn("tasked.path.dir", {leaf_dir, project})})
+		   table.insert(AllSpawned, {leaf_dir, Liz.spawn("tasked.path.dir", {leaf_dir, Project})})
 	   end
    end
 end
 
-for _, spawned in ipairs(all_spawned) do
+for _, spawned in ipairs(AllSpawned) do
    local folder = spawned[1]
    local spawned_results = Liz.join(spawned[2])
    local returned_found = Liz.from_json(spawned_results[1])

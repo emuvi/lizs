@@ -1,0 +1,10 @@
+#!/bin/liz
+
+print("Building...")
+if Liz.is_win() then
+    Ext = ".exe"
+else
+    Ext = ""
+end
+Liz.cmd("cargo" .. Ext, {"build"})
+print("Done build command")

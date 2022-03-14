@@ -1,0 +1,11 @@
+#!/bin/liz
+
+ProjectName = Liz.path_name(Liz.wd())
+print(ProjectName .. " Testing...")
+Liz.run("build")
+if Liz.is_win() then
+    Ext = ".exe"
+else
+    Ext = ""
+end
+print("Done test command")

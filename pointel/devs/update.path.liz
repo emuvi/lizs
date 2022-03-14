@@ -1,6 +1,6 @@
-project = Liz.args[1]
+Project = Liz.args[1]
 returned_should = false
-returned_code, returned_status = Liz.cmd("git", {"status"}, project, false, false)
+returned_code, returned_status = Liz.cmd("git", {"status"}, Project, false, false)
 if returned_code ~= 0 then
   return returned_should, returned_code, returned_status
 end  

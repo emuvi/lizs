@@ -1,51 +1,51 @@
 -- If is in a repository root then fetch it
 
-is_in_repo_root = Liz.is_dir("./.git")
+IsInRepoRoot = Liz.is_dir("./.git")
 
 -- Else try to find the Code root to fetch then all
 
-if not is_in_repo_root then
-   code_root_path = Liz.path_parent_find(".", "Code")
+if not IsInRepoRoot then
+   CodeRootPath = Liz.path_parent_find(".", "Code")
 end
 
-if not is_in_repo_root and code_root_path == "" then
+if not IsInRepoRoot and CodeRootPath == "" then
    print("Could not determine a course of action to take.")
    return
 end
 
-all_spawned = {}
+AllSpawned = {}
 
-if is_in_repo_root then
-   project = Liz.path_absolute(".")
-   print("Fetching on project path: " .. project)
-   table.insert(all_spawned, {project, Liz.spawn("fetch.path", {project})})
+if IsInRepoRoot then
+   Project = Liz.path_absolute(".")
+   print("Fetching on project path: " .. Project)
+   table.insert(AllSpawned, {Project, Liz.spawn("fetch.path", {Project})})
 else
-   print("Fetching on Code path: " .. code_root_path)
-   code_root = Liz.path_list_dirs(code_root_path)
+   print("Fetching on Code path: " .. CodeRootPath)
+   local code_root = Liz.path_list_dirs(CodeRootPath)
    for _, category in ipairs(code_root) do
-      projects = Liz.path_list_dirs(category)
+      local projects = Liz.path_list_dirs(category)
       for _, project in ipairs(projects) do
-         table.insert(all_spawned, {project, Liz.spawn("fetch.path", {project})})
+         table.insert(AllSpawned, {project, Liz.spawn("fetch.path", {project})})
       end
    end
 end
 
-any_is_error = false
-for _, spawned in ipairs(all_spawned) do
+AnyIsError = false
+for _, spawned in ipairs(AllSpawned) do
    local project = spawned[1]
    print("x----------------------------------------------------x")
    print("Fetching on project path: " .. project)
    local spawned_results = Liz.join(spawned[2])
    local returned_code = Liz.from_json(spawned_results[1])
    if returned_code ~= 0 then
-      any_is_error = true
+      AnyIsError = true
    end
    local returned_output = Liz.from_json(spawned_results[2])
    print("[" .. returned_code .. "] - " .. returned_output)
 end
 print("+----------------------------------------------------+")
 print("|                                                    |")
-if not any_is_error then
+if not AnyIsError then
    print("|                Everything fetched.                 |")
 else
    print("|     There was [ ERROR(s) ] in some project(s)!     |")

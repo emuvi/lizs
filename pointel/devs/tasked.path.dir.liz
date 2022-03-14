@@ -1,5 +1,5 @@
 dir = Liz.args[1]
-project = Liz.args[2]
+Project = Liz.args[2]
 result_found = false
 result_output = ""
 
@@ -15,7 +15,7 @@ if founds then
    for _, found in ipairs(founds) do
       local found_parts = Liz.text_file_founds(found)
       local found_path = found_parts[1]
-      local found_relative = Liz.path_relative(found_path, project)
+      local found_relative = Liz.path_relative(found_path, Project)
       local found_row = found_parts[2]
       local found_line = found_parts[6]
       result_output = result_output .. "(" ..found_relative .. "[" .. found_row .. "]) " ..found_line .. "\n"
