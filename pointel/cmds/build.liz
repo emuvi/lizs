@@ -1,5 +1,5 @@
 #!/bin/liz
 
 print("Building...")
-Liz.cmd("cargo" .. Liz.exe_ext(), {"build"})
+Liz.cmd("cargo", {"build"})
 print("Done build command")
