@@ -16,5 +16,9 @@ Liz.run("build")
 local origin = "target/debug/" .. project .. Liz.dot_exe_ext()
 local destiny = Liz.path_join(pro_dest, project .. Liz.dot_exe_ext())
 Liz.cp(origin, destiny)
-if Liz.has("test.liz") then Liz.run_wd("test.liz") end
+if Liz.has("test.liz") then 
+    print("Testing specifics...")
+    Liz.run_wd("test.liz") 
+    print("Done test specifics...")
+end
 print("Done test command")
