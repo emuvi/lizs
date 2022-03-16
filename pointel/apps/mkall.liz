@@ -2,8 +2,8 @@
 
 Lines = {}
 Search_for = {
-    "export class", "export enum", "export type", "export interface",
-    "export function", "export const"
+    "export abstract class", "export class", "export type", "export interface",
+    "export enum", "export function", "export const"
 }
 
 function GetName(found_line)
