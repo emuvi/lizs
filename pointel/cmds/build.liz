@@ -8,7 +8,21 @@ if Liz.has("pre-build.liz") then
     print("Done pre build")
 end
 
-Liz.cmd("cargo", {"build"})
+if Liz.has("Cargo.toml") then
+    print("Running cargo...")
+    Liz.cmd("cargo", {"build"})
+    print("Done cargo")
+end
+
+if Liz.has("pom.xml") then
+    print("Running maven...")
+    local mvn = "mvn"
+    if Liz.is_win() then
+        mvn = "mvn.cmd"
+    end
+    Liz.cmd(mvn, {"clean", "install"})
+    print("Done maven")
+end
 
 if Liz.has("pos-build.liz") then 
     print("Running post build...")
