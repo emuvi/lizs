@@ -9,7 +9,7 @@ for i, arg in pairs(Liz.args) do
 end
 HasChanges = Liz.git_has_changes(Project)
 if not HasChanges then
-   return 0, "There are not changes in the project."
+   return 0, "There are no changes in the project."
 else
    Liz.cmd("git", {"add", "-A"}, Project, false, false)
    Liz.cmd("git", {"commit", "-m", "prototype development"}, Project, false, false)
