@@ -1,5 +1,5 @@
-function IsArk(name)
-   return Liz.starts_with(name, "ark-")
+function IsAim(name)
+   return Liz.starts_with(name, "aim-")
 end
 
 function IsApp(checker)
@@ -24,16 +24,16 @@ end
 print("Cloning on Devs path: " .. DevsRootPath)
 
 Liz.cd(DevsRootPath)
-Liz.mkdir("Arks")
 Liz.mkdir("Code")
+Liz.mkdir("Code/aims")
 Liz.mkdir("Code/apps")
 Liz.mkdir("Code/cmds")
 Liz.mkdir("Code/webs")
 
-failed = {}
+local failed = {}
 
-clone_page = 0
-repo_index = 0
+local clone_page = 0
+local repo_index = 0
 while true do
    clone_page = clone_page + 1
    local resp = Liz.get("https://api.github.com/users/emuvi/repos?page=" .. tostring(clone_page))
@@ -49,8 +49,8 @@ while true do
       local to_clone = repo["clone_url"]
       local checker = Liz.tolower(description)
       local destiny = ""
-      if (IsArk(name)) then
-         destiny = "./Arks/"
+      if (IsAim(name)) then
+         destiny = "./Code/aims/"
       elseif (IsApp(checker)) then
          destiny = "./Code/apps/"      
       elseif (IsCmd(checker)) then
@@ -85,7 +85,7 @@ while true do
       break;
    end
 end
-first_failed = true
+local first_failed = true
 for _, fail in pairs(failed) do
    if first_failed then
       first_failed = false
