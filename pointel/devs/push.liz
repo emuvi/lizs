@@ -21,9 +21,9 @@ if IsInRepoRoot then
    table.insert(AllSpawned, {Project, Liz.spawn("push.path", {Project})})
 else
    print("Pushing on Code path: " .. CodeRootPath)
-   code_root = Liz.path_list_dirs(CodeRootPath)
+   local code_root = Liz.path_list_dirs(CodeRootPath)
    for _, category in ipairs(code_root) do
-      projects = Liz.path_list_dirs(category)
+      local projects = Liz.path_list_dirs(category)
       for _, project in ipairs(projects) do
          table.insert(AllSpawned, {project, Liz.spawn("push.path", {project})})
       end
