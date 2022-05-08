@@ -1,18 +1,10 @@
-function IsAim(name)
-   return Liz.starts_with(name, "aim-")
-end
+function IsAim(name) return Liz.starts_with(name, "aim-") end
 
-function IsApp(checker)
-   return Liz.contains(checker, "application")
-end
+function IsApp(checker) return Liz.contains(checker, "application") end
 
-function IsCmd(checker)
-   return Liz.contains(checker, "command")
-end
+function IsCmd(checker) return Liz.contains(checker, "command") end
 
-function IsWeb(checker)
-   return Liz.contains(checker, "webmedia")
-end
+function IsWeb(checker) return Liz.contains(checker, "webmedia") end
 
 DevsRootPath = Liz.path_parent_find(".", "Devs")
 
@@ -47,7 +39,8 @@ local clone_page = 0
 local repo_index = 0
 while true do
    clone_page = clone_page + 1
-   local resp = Liz.get("https://api.github.com/users/emuvi/repos?page=" .. tostring(clone_page))
+   local resp = Liz.get("https://api.github.com/users/emuvi/repos?page=" ..
+      tostring(clone_page))
    local repos = Liz.from_json(resp)
    local page_empty = true
    for _, repo in pairs(repos) do
@@ -79,26 +72,27 @@ while true do
       else
          local destiny_name = destiny .. "/" .. name
          if Liz.has(destiny_name) then
-            print("The repository already exists, it will be pulled.")
-            local code, output = Liz.cmd("git", {"pull"}, destiny_name, false, false)
-            if code ~= 0 then
-               table.insert(failed, name)
-            end
+            print(
+            "The repository already exists, it will be restored and pulled.")
+            local code, output = Liz.cmd("git", { "restore", "." },
+               destiny_name, false, false)
+            if code ~= 0 then table.insert(failed, name) end
+            print(output)
+            local code, output = Liz.cmd("git", { "pull" }, destiny_name,
+               false, false)
+            if code ~= 0 then table.insert(failed, name) end
             print(output)
          else
             print("The repository does not exists, it will be cloned.")
-            local code, output = Liz.cmd("git", {"clone", to_clone}, destiny, false, false)
-            if code ~= 0 then
-               table.insert(failed, name)
-            end
+            local code, output = Liz.cmd("git", { "clone", to_clone },
+               destiny, false, false)
+            if code ~= 0 then table.insert(failed, name) end
             print(output)
          end
       end
       print("x----------------------------------------------------x")
    end
-   if page_empty or true then
-      break;
-   end
+   if page_empty then break end
 end
 local first_failed = true
 for _, fail in pairs(failed) do
@@ -117,13 +111,11 @@ print("|                                                    |")
 print("x----------------------------------------------------x")
 
 local del_olds = Liz.ask_bool("Do you wish to remove old projects that was not found on the repository?")
-if not del_olds then
-   return
-end
+if not del_olds then return end
 
 for _, aimFolder in pairs(Liz.path_list_dirs(aimsPath)) do
    local aimFolder = Liz.path_name(aimFolder)
-   print("Check if " .. aimFolder .. " is on the repository.")
+   print("Checking if " .. aimFolder .. " is on the repository.")
    local found = false
    for _, aim in pairs(all_aims) do
       if aim == aimFolder then
@@ -131,13 +123,62 @@ for _, aimFolder in pairs(Liz.path_list_dirs(aimsPath)) do
          break
       end
    end
-   Liz.pause()
    if not found then
-      print("Removing " .. aimFolder .. " from the repository.")
-      if Liz.rm(aimsPath .. "/" .. aimFolder) then
-         print("Removed " .. aimFolder)
-      else
-         print("Could not remove " .. aimFolder)
+      local shouldDel = Liz.ask_bool("Was not found on the repository, do you wish to delete it?")
+      if shouldDel then
+         print("Deleting " .. aimFolder .. "...")
+         Liz.rm(aimsPath .. "/" .. aimFolder)
+         print("Deleted " .. aimFolder)
       end
    end
 end
+
+for _, appFolder in pairs(Liz.path_list_dirs(appsPath)) do
+   local appFolder = Liz.path_name(appFolder)
+   print("Checking if " .. appFolder .. " is on the repository.")
+   local found = false
+   for _, app in pairs(all_apps) do
+      if app == appFolder then
+         found = true
+         break
+      end
+   end
+   if not found then
+      Liz.rm(appsPath .. "/" .. appFolder)
+      print("Removed " .. appFolder)
+   end
+end
+
+for _, cmdFolder in pairs(Liz.path_list_dirs(cmdsPath)) do
+   local cmdFolder = Liz.path_name(cmdFolder)
+   print("Checking if " .. cmdFolder .. " is on the repository.")
+   local found = false
+   for _, cmd in pairs(all_cmds) do
+      if cmd == cmdFolder then
+         found = true
+         break
+      end
+   end
+   if not found then
+      Liz.rm(cmdsPath .. "/" .. cmdFolder)
+      print("Removed " .. cmdFolder)
+   end
+end
+
+for _, webFolder in pairs(Liz.path_list_dirs(websPath)) do
+   local webFolder = Liz.path_name(webFolder)
+   print("Checking if " .. webFolder .. " is on the repository.")
+   local found = false
+   for _, web in pairs(all_webs) do
+      if web == webFolder then
+         found = true
+         break
+      end
+   end
+   if not found then
+      Liz.rm(websPath .. "/" .. webFolder)
+      print("Removed " .. webFolder)
+   end
+end
+
+Liz.pause()
