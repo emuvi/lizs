@@ -23,14 +23,25 @@ end
 
 print("Cloning on Devs path: " .. DevsRootPath)
 
+local codePath = "Code"
+local aimsPath = "Code/aims"
+local appsPath = "Code/apps"
+local cmdsPath = "Code/cmds"
+local websPath = "Code/webs"
+
 Liz.cd(DevsRootPath)
-Liz.mkdir("Code")
-Liz.mkdir("Code/aims")
-Liz.mkdir("Code/apps")
-Liz.mkdir("Code/cmds")
-Liz.mkdir("Code/webs")
+Liz.mkdir(codePath)
+Liz.mkdir(aimsPath)
+Liz.mkdir(appsPath)
+Liz.mkdir(cmdsPath)
+Liz.mkdir(websPath)
 
 local failed = {}
+
+local all_aims = {}
+local all_apps = {}
+local all_cmds = {}
+local all_webs = {}
 
 local clone_page = 0
 local repo_index = 0
@@ -51,12 +62,16 @@ while true do
       local destiny = ""
       if (IsAim(name)) then
          destiny = "./Code/aims/"
+         table.insert(all_aims, name)
       elseif (IsApp(checker)) then
-         destiny = "./Code/apps/"      
+         destiny = "./Code/apps/"
+         table.insert(all_apps, name)
       elseif (IsCmd(checker)) then
-         destiny = "./Code/cmds/"      
+         destiny = "./Code/cmds/"
+         table.insert(all_cmds, name)
       elseif (IsWeb(checker)) then
-         destiny = "./Code/webs/"      
+         destiny = "./Code/webs/"
+         table.insert(all_webs, name)
       end
       if destiny == "" then
          print("ERROR: Could not determine the nature of this repository.")
@@ -81,7 +96,7 @@ while true do
       end
       print("x----------------------------------------------------x")
    end
-   if page_empty then
+   if page_empty or true then
       break;
    end
 end
@@ -100,3 +115,29 @@ print("|                                                    |")
 print("|            Finished to Clone Pointel!              |")
 print("|                                                    |")
 print("x----------------------------------------------------x")
+
+local del_olds = Liz.ask_bool("Do you wish to remove old projects that was not found on the repository?")
+if not del_olds then
+   return
+end
+
+for _, aimFolder in pairs(Liz.path_list_dirs(aimsPath)) do
+   local aimFolder = Liz.path_name(aimFolder)
+   print("Check if " .. aimFolder .. " is on the repository.")
+   local found = false
+   for _, aim in pairs(all_aims) do
+      if aim == aimFolder then
+         found = true
+         break
+      end
+   end
+   Liz.pause()
+   if not found then
+      print("Removing " .. aimFolder .. " from the repository.")
+      if Liz.rm(aimsPath .. "/" .. aimFolder) then
+         print("Removed " .. aimFolder)
+      else
+         print("Could not remove " .. aimFolder)
+      end
+   end
+end
