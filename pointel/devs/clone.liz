@@ -110,6 +110,10 @@ print("|            Finished to Clone Pointel!              |")
 print("|                                                    |")
 print("x----------------------------------------------------x")
 
+print("")
+print("")
+print("")
+
 local del_olds = Liz.ask_bool("Do you wish to remove old projects that was not found on the repository?")
 if not del_olds then return end
 
@@ -130,7 +134,10 @@ for _, aimFolder in pairs(Liz.path_list_dirs(aimsPath)) do
          Liz.rm(aimsPath .. "/" .. aimFolder)
          print("Deleted " .. aimFolder)
       end
+   else
+      print("We found " .. aimFolder .. " on the repository.")
    end
+   print("")
 end
 
 for _, appFolder in pairs(Liz.path_list_dirs(appsPath)) do
@@ -144,9 +151,16 @@ for _, appFolder in pairs(Liz.path_list_dirs(appsPath)) do
       end
    end
    if not found then
-      Liz.rm(appsPath .. "/" .. appFolder)
-      print("Removed " .. appFolder)
+      local shouldDel = Liz.ask_bool("Was not found on the repository, do you wish to delete it?")
+      if shouldDel then
+         print("Deleting " .. appFolder .. "...")
+         Liz.rm(appsPath .. "/" .. appFolder)
+         print("Deleted " .. appFolder)
+      end
+   else
+      print("We found " .. appFolder .. " on the repository.")
    end
+   print("")
 end
 
 for _, cmdFolder in pairs(Liz.path_list_dirs(cmdsPath)) do
@@ -160,9 +174,16 @@ for _, cmdFolder in pairs(Liz.path_list_dirs(cmdsPath)) do
       end
    end
    if not found then
-      Liz.rm(cmdsPath .. "/" .. cmdFolder)
-      print("Removed " .. cmdFolder)
+      local shouldDel = Liz.ask_bool("Was not found on the repository, do you wish to delete it?")
+      if shouldDel then
+         print("Deleting " .. cmdFolder .. "...")
+         Liz.rm(cmdsPath .. "/" .. cmdFolder)
+         print("Deleted " .. cmdFolder)
+      end
+   else
+      print("We found " .. cmdFolder .. " on the repository.")
    end
+   print("")
 end
 
 for _, webFolder in pairs(Liz.path_list_dirs(websPath)) do
@@ -176,9 +197,14 @@ for _, webFolder in pairs(Liz.path_list_dirs(websPath)) do
       end
    end
    if not found then
-      Liz.rm(websPath .. "/" .. webFolder)
-      print("Removed " .. webFolder)
+      local shouldDel = Liz.ask_bool("Was not found on the repository, do you wish to delete it?")
+      if shouldDel then
+         print("Deleting " .. webFolder .. "...")
+         Liz.rm(websPath .. "/" .. webFolder)
+         print("Deleted " .. webFolder)
+      end
+   else
+      print("We found " .. webFolder .. " on the repository.")
    end
+   print("")
 end
-
-Liz.pause()
