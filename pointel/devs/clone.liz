@@ -1,4 +1,4 @@
-function IsAim(name) return Liz.starts_with(name, "aim-") end
+function IsArc(name) return Liz.starts_with(name, "arc-") end
 
 function IsApp(checker) return Liz.contains(checker, "application") end
 
@@ -16,21 +16,21 @@ end
 print("Cloning on Devs path: " .. DevsRootPath)
 
 local codePath = "Code"
-local aimsPath = "Code/aims"
+local arcsPath = "Code/arcs"
 local appsPath = "Code/apps"
 local cmdsPath = "Code/cmds"
 local websPath = "Code/webs"
 
 Liz.cd(DevsRootPath)
 Liz.mkdir(codePath)
-Liz.mkdir(aimsPath)
+Liz.mkdir(arcsPath)
 Liz.mkdir(appsPath)
 Liz.mkdir(cmdsPath)
 Liz.mkdir(websPath)
 
 local failed = {}
 
-local all_aims = {}
+local all_arcs = {}
 local all_apps = {}
 local all_cmds = {}
 local all_webs = {}
@@ -53,9 +53,9 @@ while true do
       local to_clone = repo["clone_url"]
       local checker = Liz.tolower(description)
       local destiny = ""
-      if (IsAim(name)) then
-         destiny = "./Code/aims/"
-         table.insert(all_aims, name)
+      if (IsArc(name)) then
+         destiny = "./Code/arcs/"
+         table.insert(all_arcs, name)
       elseif (IsApp(checker)) then
          destiny = "./Code/apps/"
          table.insert(all_apps, name)
@@ -117,12 +117,12 @@ print("")
 local del_olds = Liz.ask_bool("Do you wish to remove old projects that was not found on the repository?")
 if not del_olds then return end
 
-for _, aimFolder in pairs(Liz.path_list_dirs(aimsPath)) do
-   local aimFolder = Liz.path_name(aimFolder)
-   print("Checking if " .. aimFolder .. " is on the repository.")
+for _, arcFolder in pairs(Liz.path_list_dirs(arcsPath)) do
+   local arcFolder = Liz.path_name(arcFolder)
+   print("Checking if " .. arcFolder .. " is on the repository.")
    local found = false
-   for _, aim in pairs(all_aims) do
-      if aim == aimFolder then
+   for _, arc in pairs(all_arcs) do
+      if arc == arcFolder then
          found = true
          break
       end
@@ -130,12 +130,12 @@ for _, aimFolder in pairs(Liz.path_list_dirs(aimsPath)) do
    if not found then
       local shouldDel = Liz.ask_bool("Was not found on the repository, do you wish to delete it?")
       if shouldDel then
-         print("Deleting " .. aimFolder .. "...")
-         Liz.rm(aimsPath .. "/" .. aimFolder)
-         print("Deleted " .. aimFolder)
+         print("Deleting " .. arcFolder .. "...")
+         Liz.rm(arcsPath .. "/" .. arcFolder)
+         print("Deleted " .. arcFolder)
       end
    else
-      print("We found " .. aimFolder .. " on the repository.")
+      print("We found " .. arcFolder .. " on the repository.")
    end
    print("")
 end
