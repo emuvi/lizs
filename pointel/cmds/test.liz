@@ -25,7 +25,7 @@ local pro_dest = Liz.path_join(cmd_dest, project)
 
 local tooled_path = nil
 local check_tooled = Liz.os_sep() .. "Tooled"
-for _, path in pairs(Liz.path_env_dirs(tst_path)) do
+for _, path in pairs(Liz.path_env_dirs()) do
     if Liz.contains(path, check_tooled) then
         tooled_path = path
         break
