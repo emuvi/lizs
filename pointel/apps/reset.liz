@@ -8,6 +8,6 @@ else
   Ext = ""
 end
 Liz.cmd("npm" .. Ext, { "install" })
-print("Done install dependencies.")
+print("Done install dependencies")
 Liz.run("test")
 print("Done reset application")
