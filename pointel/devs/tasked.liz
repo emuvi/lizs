@@ -13,33 +13,38 @@ if not IsInRepoRoot and CodeRootPath == "" then
    return
 end
 
-AllSpawned = {}
+local all_spawned = {}
 
 if IsInRepoRoot then
-   Project = Liz.path_absolute(".")
-   print("Tasked on project path: " .. Project)
-   table.insert(AllSpawned, {Project, Liz.spawn("tasked.path", {Project})})
+   local project = Liz.path_absolute(".")
+   print("Tasked on project path: " .. project)
+   table.insert(all_spawned, { project, Liz.spawn("tasked.path", { project }) })
 else
    print("Tasked on Code path: " .. CodeRootPath)
-   code_root = Liz.path_list_dirs(CodeRootPath)
+   local code_root = Liz.path_list_dirs(CodeRootPath)
    for _, category in ipairs(code_root) do
-      projects = Liz.path_list_dirs(category)
+      local projects = Liz.path_list_dirs(category)
       for _, project in ipairs(projects) do
-         local spawned = Liz.spawn("tasked.path", {project})
-         table.insert(AllSpawned, {project, Liz.spawn("tasked.path", {project})})
-       end
+         table.insert(all_spawned, { project, Liz.spawn("tasked.path", { project }) })
+      end
    end
 end
 
-for _, spawned in ipairs(AllSpawned) do
-    local project = spawned[1]
-    local spawned_results = Liz.join(spawned[2])
-    local returned_found = Liz.from_json(spawned_results[1])
-    if returned_found then	   
-	   print("x----------------------------------------------------x")
-	   print("Tasked on project path: " .. project)
-	   local returned_output = Liz.from_json(spawned_results[2])
-	   print(Liz.trim(returned_output))
-    end
+for _, spawned in ipairs(all_spawned) do
+   local project = spawned[1]
+   local spawned_results = Liz.join(spawned[2])
+   local returned_found = Liz.from_json(spawned_results[1])
+   if returned_found then
+      print("")
+      print("x----------------------------------------------------x")
+      print("")
+      print("Tasked on project path: " .. project)
+      local returned_output = Liz.from_json(spawned_results[2])
+      print(Liz.trim(returned_output))
+      print("")
+      Liz.pause()
+      print("")
+   end
 end
+print("")
 print("x----------------------------------------------------x")

@@ -1,24 +1,24 @@
-dir = Liz.args[1]
-Project = Liz.args[2]
-result_found = false
-result_output = ""
+local dir = Liz.args[1]
+local project = Liz.args[2]
+local result_found = false
+local result_output = ""
 
-extensions = { ".txt", ".md", ".html", ".htm", ".css", 
-               ".js", ".json", ".ts", ".rs", ".toml", 
-               ".Liz", ".lua", ".sh", ".bat", ".el" }
+local extensions = { ".txt", ".md", ".html", ".htm", ".css",
+   ".js", ".json", ".ts", ".rs", ".toml",
+   ".Liz", ".lua", ".sh", ".bat", ".el" }
 
-files = Liz.path_list_files_exts(dir, extensions)
-search_for = {"[" .. "EVAL" .. "]", "[" .. "TODO" .. "]"}
-founds = Liz.text_files_find_any(files, search_for)
-if founds then   
+local files = Liz.path_list_files_exts(dir, extensions)
+local search_for = { "[ " .. "EVAL" .. " ]", "[ " .. "TODO" .. " ]" }
+local founds = Liz.text_files_find_any(files, search_for)
+if founds then
    result_found = true
    for _, found in ipairs(founds) do
       local found_parts = Liz.text_file_founds(found)
       local found_path = found_parts[1]
-      local found_relative = Liz.path_relative(found_path, Project)
+      local found_relative = Liz.path_relative(found_path, project)
       local found_row = found_parts[2]
       local found_line = found_parts[6]
-      result_output = result_output .. "(" ..found_relative .. "[" .. found_row .. "]) " ..found_line .. "\n"
+      result_output = result_output .. "(" .. found_relative .. "[" .. found_row .. "]) " .. found_line .. "\n"
    end
 end
 

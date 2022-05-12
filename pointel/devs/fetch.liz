@@ -13,25 +13,25 @@ if not IsInRepoRoot and CodeRootPath == "" then
    return
 end
 
-AllSpawned = {}
+local all_spawned = {}
 
 if IsInRepoRoot then
-   Project = Liz.path_absolute(".")
-   print("Fetching on project path: " .. Project)
-   table.insert(AllSpawned, {Project, Liz.spawn("fetch.path", {Project})})
+   local project = Liz.path_absolute(".")
+   print("Fetching on project path: " .. project)
+   table.insert(all_spawned, { project, Liz.spawn("fetch.path", { project }) })
 else
    print("Fetching on Code path: " .. CodeRootPath)
    local code_root = Liz.path_list_dirs(CodeRootPath)
    for _, category in ipairs(code_root) do
       local projects = Liz.path_list_dirs(category)
       for _, project in ipairs(projects) do
-         table.insert(AllSpawned, {project, Liz.spawn("fetch.path", {project})})
+         table.insert(all_spawned, { project, Liz.spawn("fetch.path", { project }) })
       end
    end
 end
 
 AnyIsError = false
-for _, spawned in ipairs(AllSpawned) do
+for _, spawned in ipairs(all_spawned) do
    local project = spawned[1]
    print("x----------------------------------------------------x")
    print("Fetching on project path: " .. project)

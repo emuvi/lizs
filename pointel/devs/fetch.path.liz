@@ -1,2 +1,2 @@
-Project = Liz.args[1]
-return Liz.cmd("git", {"pull"}, Project, false, false)
+local project = Liz.args[1]
+return Liz.cmd("git", { "pull" }, project, false, false)

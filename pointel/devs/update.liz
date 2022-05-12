@@ -13,31 +13,33 @@ if not IsInRepoRoot and CodeRootPath == "" then
    return
 end
 
-AllSpawned = {}
+local all_spawned = {}
 
 if IsInRepoRoot then
-   Project = Liz.path_absolute(".")
-   print("Updating on project path: " .. Project)
-   table.insert(AllSpawned, {Project, Liz.spawn("update.path", {Project})})
+   local project = Liz.path_absolute(".")
+   print("Updating on project path: " .. project)
+   table.insert(all_spawned, { project, Liz.spawn("update.path", { project }) })
 else
    print("Updating on Code path: " .. CodeRootPath)
-   code_root = Liz.path_list_dirs(CodeRootPath)
+   local code_root = Liz.path_list_dirs(CodeRootPath)
    for _, category in ipairs(code_root) do
-      projects = Liz.path_list_dirs(category)
+      local projects = Liz.path_list_dirs(category)
       for _, project in ipairs(projects) do
-         table.insert(AllSpawned, {project, Liz.spawn("update.path", {project})})
+         table.insert(all_spawned, { project, Liz.spawn("update.path", { project }) })
       end
    end
 end
 
-for _, spawned in ipairs(AllSpawned) do
+for _, spawned in ipairs(all_spawned) do
    local project = spawned[1]
    local spawned_results = Liz.join(spawned[2])
    local returned_should = Liz.from_json(spawned_results[1])
    local returned_code = Liz.from_json(spawned_results[2])
    local returned_status = Liz.from_json(spawned_results[3])
    if returned_should then
+      print("")
       print("x----------------------------------------------------x")
+      print("")
       print("Update to project path: " .. project)
       print(returned_status)
       print("")
@@ -46,15 +48,19 @@ for _, spawned in ipairs(AllSpawned) do
       if descriptor == "" then
          print("The descriptor can't be empty, skipping this update.")
       else
-         Liz.cmd("git", {"add", "-A"}, project, true, true)
-         Liz.cmd("git", {"commit", "-m", descriptor}, project, true, true)
-         Liz.cmd("git", {"push"}, project, true, true)
+         Liz.cmd("git", { "add", "-A" }, project, true, true)
+         Liz.cmd("git", { "commit", "-m", descriptor }, project, true, true)
+         Liz.cmd("git", { "push" }, project, true, true)
       end
    elseif returned_code ~= 0 then
+      print("")
       print("x----------------------------------------------------x")
+      print("")
       print("Error on project path: " .. project)
       print(returned_status)
       Liz.pause()
    end
 end
+print("")
 print("x----------------------------------------------------x")
+print("")
