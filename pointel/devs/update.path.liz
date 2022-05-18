@@ -1,11 +1,11 @@
 Project = Liz.args[1]
-returned_should = false
-returned_code, returned_status = Liz.cmd("git", { "status" }, Project, false, false)
+local returned_should = false
+local returned_code, returned_status = Liz.cmd("git", { "status" }, Project, false, false)
 if returned_code ~= 0 then
   return returned_should, returned_code, returned_status
 end
 returned_status = Liz.trim(returned_status)
-git_no_changes_end = "nothing to commit, working tree clean"
+local git_no_changes_end = "nothing to commit, working tree clean"
 if Liz.ends_with(returned_status, git_no_changes_end) then
   return returned_should, returned_code, returned_status
 end
