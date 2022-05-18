@@ -48,9 +48,9 @@ for _, spawned in ipairs(all_spawned) do
       if descriptor == "" then
          print("The descriptor can't be empty, skipping this update.")
       else
-         Liz.cmd("git", { "add", "-A" }, project, true, true)
-         Liz.cmd("git", { "commit", "-m", descriptor }, project, true, true)
-         Liz.cmd("git", { "push" }, project, true, true)
+         Liz.cmd("git", { "add", "-A" }, project, true, false)
+         Liz.cmd("git", { "commit", "-m", descriptor }, project, true, false)
+         Liz.cmd("git", { "push" }, project, true, false)
       end
    elseif returned_code ~= 0 then
       print("")
