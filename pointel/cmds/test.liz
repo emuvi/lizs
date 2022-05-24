@@ -71,9 +71,8 @@ if Liz.has("pom.xml") then
         end
     elseif Liz.is_dir("target") then
         local jar_files = Liz.path_list_files_ext("target", "jar")
-        for _, jar_file in pairs(jar_files) do
-            print("Checking " .. jar_file)
-        end
+        local origin_jar = Liz.find_smaller_line(jar_files)
+        print("Checking " .. origin_jar)
     end
 end
 
