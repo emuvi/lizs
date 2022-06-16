@@ -4,7 +4,7 @@ function IsApp(checker) return Liz.contains(checker, "application") end
 
 function IsCmd(checker) return Liz.contains(checker, "command") end
 
-function IsWeb(checker) return Liz.contains(checker, "webmedia") end
+function IsWeb(checker) return Liz.contains(checker, "web-media") end
 
 DevsRootPath = Liz.path_parent_find(".", "Devs")
 
