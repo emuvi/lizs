@@ -1,0 +1,23 @@
+Project = Liz.args[1]
+SetUpStream = false
+for i, arg in pairs(Liz.args) do
+   if i > 1 then
+      if arg == "--set-upstream" then
+         SetUpStream = true
+      end
+   end
+end
+HasChanges = Liz.git_has_changes(Project)
+if not HasChanges then
+   return 0, "There are no changes in the project."
+else
+   Liz.cmd("git", { "add", "-A" }, Project, false, false)
+   Liz.cmd("git", { "commit", "-m", "prototype development" }, Project, false, false)
+   local push_args = { "push" }
+   if SetUpStream then
+      table.insert(push_args, "--set-upstream")
+      table.insert(push_args, "origin")
+      table.insert(push_args, "master")
+   end
+   return Liz.cmd("git", push_args, Project, false, false)
+end

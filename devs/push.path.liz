@@ -1,23 +1,14 @@
 Project = Liz.args[1]
-SetUpStream = false
-for i, arg in pairs(Liz.args) do
-   if i > 1 then
-      if arg == "--set-upstream" then
-         SetUpStream = true
-      end
-   end
+local returned_should = false
+local returned_code, returned_status = Liz.cmd("git", { "status" }, Project, false, false)
+if returned_code ~= 0 then
+  return returned_should, returned_code, returned_status
 end
-HasChanges = Liz.git_has_changes(Project)
-if not HasChanges then
-   return 0, "There are no changes in the project."
-else
-   Liz.cmd("git", { "add", "-A" }, Project, false, false)
-   Liz.cmd("git", { "commit", "-m", "prototype development" }, Project, false, false)
-   local push_args = { "push" }
-   if SetUpStream then
-      table.insert(push_args, "--set-upstream")
-      table.insert(push_args, "origin")
-      table.insert(push_args, "master")
-   end
-   return Liz.cmd("git", push_args, Project, false, false)
+returned_status = Liz.trim(returned_status)
+local git_no_changes_end = "nothing to commit, working tree clean"
+if Liz.ends_with(returned_status, git_no_changes_end)
+    and not Liz.contains(returned_status, "Your branch is ahead of") then
+  return returned_should, returned_code, returned_status
 end
+returned_should = true
+return returned_should, returned_code, returned_status

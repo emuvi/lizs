@@ -16,9 +16,9 @@ end
 local all_spawned = {}
 
 if IsInRepoRoot then
-   Project = Liz.path_absolute(".")
-   print("Pushing on project path: " .. Project)
-   table.insert(all_spawned, { Project, Liz.spawn("push.path", { Project }) })
+   local project = Liz.path_absolute(".")
+   print("Pushing on project path: " .. project)
+   table.insert(all_spawned, { project, Liz.spawn("push.path", { project }) })
 else
    print("Pushing on Code path: " .. CodeRootPath)
    local code_root = Liz.path_list_dirs(CodeRootPath)
@@ -30,25 +30,37 @@ else
    end
 end
 
-AnyIsError = false
 for _, spawned in ipairs(all_spawned) do
    local project = spawned[1]
-   print("x----------------------------------------------------x")
-   print("Pushing on project path: " .. project)
    local spawned_results = Liz.join(spawned[2])
-   local returned_code = Liz.from_json(spawned_results[1])
-   if returned_code ~= 0 then
-      AnyIsError = true
+   local returned_should = Liz.from_json(spawned_results[1])
+   local returned_code = Liz.from_json(spawned_results[2])
+   local returned_status = Liz.from_json(spawned_results[3])
+   if returned_should then
+      print("")
+      print("x----------------------------------------------------x")
+      print("")
+      print("Pushing to project path: " .. project)
+      print(returned_status)
+      print("")
+      local descriptor = Liz.trim(Liz.ask("Descriptor: "))
+      print("")
+      if descriptor == "" then
+         print("The descriptor can't be empty, skipping this push.")
+      else
+         Liz.cmd("git", { "add", "-A" }, project, true, false)
+         Liz.cmd("git", { "commit", "-m", descriptor }, project, true, false)
+         Liz.cmd("git", { "push" }, project, true, false)
+      end
+   elseif returned_code ~= 0 then
+      print("")
+      print("x----------------------------------------------------x")
+      print("")
+      print("Error on project path: " .. project)
+      print(returned_status)
+      Liz.pause()
    end
-   local returned_output = Liz.from_json(spawned_results[2])
-   print("[" .. returned_code .. "] - " .. returned_output)
 end
-print("+----------------------------------------------------+")
-print("|                                                    |")
-if not AnyIsError then
-   print("|                Everything pushed.                  |")
-else
-   print("|     There was [ ERROR(s) ] in some project(s)!     |")
-end
-print("|                                                    |")
-print("+----------------------------------------------------+")
+print("")
+print("x----------------------------------------------------x")
+print("")
