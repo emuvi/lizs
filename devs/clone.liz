@@ -6,7 +6,7 @@ function IsCmd(checker) return Liz.contains(checker, "command") end
 
 function IsWeb(checker) return Liz.contains(checker, "web-media") end
 
-DevsRootPath = Liz.path_parent_find(".", "Devs")
+DevsRootPath = Liz.path_parent_find(".", "MyDevs")
 
 if DevsRootPath == "" then
    print("Could not found the Devs root path.")
